@@ -61,7 +61,7 @@ public class ResidentResource {
 	
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Long id) {
+	public void deleteResident(@PathVariable Long id) {
 		residentRepository.deleteById(id);
 	}
 	
