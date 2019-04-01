@@ -1,10 +1,18 @@
 package com.rjd.condominium.api.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "vehicle")
@@ -13,10 +21,22 @@ public class Vehicle {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@NotNull
 	private String vehicle;
+	
+	@NotNull
 	private String model;
+	
+	@NotNull
 	private String color;
+	
+	@NotNull
 	private String plate;
+	
+	@ManyToMany(mappedBy = "vehicles", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
+	private List<Resident> residents;
 
 	public Long getId() {
 		return id;
@@ -56,6 +76,14 @@ public class Vehicle {
 
 	public void setPlate(String plate) {
 		this.plate = plate;
+	}
+
+	public List<Resident> getResidents() {
+		return residents;
+	}
+
+	public void setResidents(List<Resident> residents) {
+		this.residents = residents;
 	}
 
 	@Override

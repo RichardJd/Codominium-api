@@ -15,10 +15,16 @@ public class People {
 
 	@NotNull
 	@CPF
+	@Size(max = 20)
 	private String cpf;
 
+	@Size(max = 20)
 	private String rg;
+	
+	@Size(max = 20)
 	private String phone;
+	
+	@Size(max = 20)
 	private String cell;
 
 	public String getName() {

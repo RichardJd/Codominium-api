@@ -15,8 +15,12 @@ public class ResidentService {
 
 	@Autowired
 	private ResidentRepository residentRepository;
+		
+	public Resident insertResident(Resident resident) {
+		return residentRepository.save(resident);
+	}
 	
-	public Resident Update(Long id, Resident resident) {
+	public Resident updateResident(Long id, Resident resident) {
 		Resident residentSaved = searchResidentById(id);
 		BeanUtils.copyProperties(resident, residentSaved, "id");
 		
@@ -31,4 +35,5 @@ public class ResidentService {
 		}
 		return resident.get();
 	}
+
 }

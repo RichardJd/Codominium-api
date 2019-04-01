@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rjd.condominium.api.event.RecursoCriadoEvent;
+import com.rjd.condominium.api.event.ResourceCreatedEvent;
 import com.rjd.condominium.api.model.Vehicle;
 import com.rjd.condominium.api.repository.VehicleRepository;
 
@@ -43,7 +43,7 @@ public class VehicleResource {
 	@PostMapping
 	public ResponseEntity<Vehicle> insertVehicle(@Valid @RequestBody Vehicle vehicle, HttpServletResponse response) {
 		Vehicle vehicleSaved = vehicleRepository.save(vehicle);
-		publisher.publishEvent(new RecursoCriadoEvent(this, vehicleSaved.getId(), response));
+		publisher.publishEvent(new ResourceCreatedEvent(this, vehicleSaved.getId(), response));
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(vehicleSaved);
 	}

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rjd.condominium.api.event.RecursoCriadoEvent;
+import com.rjd.condominium.api.event.ResourceCreatedEvent;
 import com.rjd.condominium.api.model.Resident;
 import com.rjd.condominium.api.repository.ResidentRepository;
 import com.rjd.condominium.api.service.ResidentService;
@@ -47,8 +47,9 @@ public class ResidentResource {
 	
 	@PostMapping
 	public ResponseEntity<Resident> insertResident(@RequestBody @Valid Resident resident, HttpServletResponse response) {
-		Resident residentSaved = residentRepository.save(resident);
-		publisher.publishEvent(new RecursoCriadoEvent(this, residentSaved.getId(), response));
+		
+		Resident residentSaved = residentService.insertResident(resident);
+		publisher.publishEvent(new ResourceCreatedEvent(this, residentSaved.getId(), response));
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(residentSaved);
 	}
@@ -67,7 +68,7 @@ public class ResidentResource {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Resident> updateResident(@RequestBody @Valid Resident resident, @PathVariable Long id) {
-		Resident residentSaved = residentService.Update(id, resident);
+		Resident residentSaved = residentService.updateResident(id, resident);
 		return ResponseEntity.ok(residentSaved);
 	}
 }

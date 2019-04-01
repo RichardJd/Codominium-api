@@ -3,55 +3,56 @@ package com.rjd.condominium.api.model;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 @Entity
-@Table(name = "resident")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public class Resident extends People {
+@Table(name = "visitant")
+public class Visitant {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Email
-	@Size(max = 60)
-	private String email;
+	@NotNull
+	@Size(min = 3, max = 60)
+	private String name;
 	
 	@NotNull
-	@Size(max = 10)
-	private String tower;
+	@CPF
+	@Size(max = 20)
+	private String cpf;
 	
-	@NotNull
-	@Size(max = 10)
-	private String apartment;
+	@Size(max = 20)
+	private String rg;
+	
+	@Size(max = 20)
+	private String phone;
+	
+	@Size(max = 20)
+	private String cell;
+	
+	@Embedded
+	private Address address;
 	
 	@Valid
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "vehicle_resident", joinColumns = @JoinColumn(name = "id_resident"), 
-		inverseJoinColumns = @JoinColumn(name = "id_vehicle"))
+	@JoinTable(name = "vehicle_visitant", joinColumns = @JoinColumn(name="id_visitant"),
+			inverseJoinColumns = @JoinColumn(name = "id_vehicle"))
 	private List<Vehicle> vehicles;
-	
-	@NotNull
-	@Valid
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id_account")
-	private Account account;
 
 	public Long getId() {
 		return id;
@@ -61,28 +62,52 @@ public class Resident extends People {
 		this.id = id;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getName() {
+		return name;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getTower() {
-		return tower;
+	public String getCpf() {
+		return cpf;
 	}
 
-	public void setTower(String tower) {
-		this.tower = tower;
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 
-	public String getApartment() {
-		return apartment;
+	public String getRg() {
+		return rg;
 	}
 
-	public void setApartment(String apartment) {
-		this.apartment = apartment;
+	public void setRg(String rg) {
+		this.rg = rg;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getCell() {
+		return cell;
+	}
+
+	public void setCell(String cell) {
+		this.cell = cell;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
 	public List<Vehicle> getVehicles() {
@@ -91,14 +116,6 @@ public class Resident extends People {
 
 	public void setVehicles(List<Vehicle> vehicles) {
 		this.vehicles = vehicles;
-	}
-
-	public Account getAccount() {
-		return account;
-	}
-
-	public void setAccount(Account account) {
-		this.account = account;
 	}
 
 	@Override
@@ -117,7 +134,7 @@ public class Resident extends People {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Resident other = (Resident) obj;
+		Visitant other = (Visitant) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -125,5 +142,4 @@ public class Resident extends People {
 			return false;
 		return true;
 	}
-	
 }
