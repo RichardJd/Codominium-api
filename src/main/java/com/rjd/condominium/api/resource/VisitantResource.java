@@ -68,7 +68,7 @@ public class VisitantResource {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Visitant> updateVisitant(@PathVariable Long id, @Valid @RequestBody Visitant visitant) {
-		Visitant visitantSaved = visitantService.updateVisitant(visitant);
+		Visitant visitantSaved = visitantService.updateVisitant(id, visitant);
 		return ResponseEntity.ok(visitantSaved);
 	}
 }

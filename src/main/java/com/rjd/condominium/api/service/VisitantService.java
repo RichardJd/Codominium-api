@@ -20,11 +20,11 @@ public class VisitantService {
 		return visitantRepository.save(visitant);
 	}
 	
-	public Visitant updateVisitant(Visitant visitant) {
-		Visitant visitantSaved = searchVisitantById(visitant.getId());
+	public Visitant updateVisitant(Long id, Visitant visitant) {
+		Visitant visitantSaved = searchVisitantById(id);
 		BeanUtils.copyProperties(visitant, visitantSaved, "id");
 		
-		return visitantSaved;
+		return visitantRepository.save(visitantSaved);
 	}
 	
 	private Visitant searchVisitantById(Long id) {
