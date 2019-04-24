@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rjd.condominium.api.event.ResourceCreatedEvent;
 import com.rjd.condominium.api.model.Visit;
 import com.rjd.condominium.api.repository.VisitRepository;
+import com.rjd.condominium.api.repository.filter.VisitFilter;
+import com.rjd.condominium.api.repository.projection.VisitSummary;
 import com.rjd.condominium.api.service.VisitService;
 
 @RestController
@@ -52,8 +54,13 @@ public class VisitResource {
 	}
 	
 	@GetMapping("/all")
-	public Page<Visit> getVisits(Pageable pageable) {
-		return visitRepository.findAll(pageable);
+	public Page<Visit> getVisits(VisitFilter visitFilter, Pageable pageable) {
+		return visitRepository.filtrate(visitFilter, pageable);
+	}
+	
+	@GetMapping(path = "/all", params = "summary")
+	public Page<VisitSummary> getVisitsSummarise(VisitFilter visitFilter, Pageable pageable) {
+		return visitRepository.summarise(visitFilter, pageable);
 	}
 	
 	@GetMapping("/{id}")
