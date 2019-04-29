@@ -45,6 +45,11 @@ public class VisitResource {
 		return visitRepository.findByOpen(true, pageable);
 	}
 	
+	@GetMapping(params = "summary")
+	public Page<VisitSummary> getOpenVisitsSummary(VisitFilter visitFilter, Pageable pageable) {
+		return visitRepository.summariseOpen(visitFilter, pageable);
+	}
+	
 	@PostMapping
 	public ResponseEntity<Visit> insertVisit(@Valid @RequestBody Visit visit, HttpServletResponse response) {
 		Visit visitSaved = visitService.insertVisit(visit);
@@ -60,7 +65,7 @@ public class VisitResource {
 	
 	@GetMapping(path = "/all", params = "summary")
 	public Page<VisitSummary> getVisitsSummarise(VisitFilter visitFilter, Pageable pageable) {
-		return visitRepository.summarise(visitFilter, pageable);
+		return visitRepository.summariseAll(visitFilter, pageable);
 	}
 	
 	@GetMapping("/{id}")

@@ -37,8 +37,8 @@ public class VisitRepositoryImpl implements VisitRepositoryQuery {
 		CriteriaQuery<Visit> criteria = builder.createQuery(Visit.class);
 		
 		Root<Visit> root = criteria.from(Visit.class);
-		Join<Visit, Resident> resident = root.join(Visit_.RESIDENT);
-		Join<Visit, Visitant> visitant = root.join(Visit_.VISITANT);
+		Join<Visit, Resident> resident = root.join(Visit_.resident);
+		Join<Visit, Visitant> visitant = root.join(Visit_.visitant);
 		
 		Predicate[] predicates = createRestrictions(visitFilter, builder, root, resident, visitant);
 		criteria.where(predicates);
@@ -50,22 +50,47 @@ public class VisitRepositoryImpl implements VisitRepositoryQuery {
 	}
 
 	@Override
-	public Page<VisitSummary> summarise(VisitFilter visitFilter, Pageable pageable) {
+	public Page<VisitSummary> summariseAll(VisitFilter visitFilter, Pageable pageable) {
 		CriteriaBuilder builder = manager.getCriteriaBuilder();
 		CriteriaQuery<VisitSummary> criteria = builder.createQuery(VisitSummary.class);
 		
 		Root<Visit> root = criteria.from(Visit.class);
-		Join<Visit, Resident> resident = root.join(Visit_.RESIDENT);
-		Join<Visit, Visitant> visitant = root.join(Visit_.VISITANT);
+		Join<Visit, Resident> resident = root.join(Visit_.resident);
+		Join<Visit, Visitant> visitant = root.join(Visit_.visitant);
 		
 		criteria.select(builder.construct(VisitSummary.class
 				, root.get(Visit_.id), root.get(Visit_.startDate)
-				, root.get(Visit_.finalDate), root.get(Visit_.resident).get(Resident_.name)
+				, root.get(Visit_.finalDate), root.get(Visit_.open)
+				, root.get(Visit_.resident).get(Resident_.name)
 				, root.get(Visit_.visitant).get(Visitant_.name)
 				, root.get(Visit_.visitant).get(Visitant_.cpf)));
 		
 		Predicate[] predicates = createRestrictions(visitFilter, builder, root, resident, visitant);
 		criteria.where(predicates);
+		
+		TypedQuery<VisitSummary> query = manager.createQuery(criteria);
+		addPagingRestrictions(query, pageable);
+		
+		return new PageImpl<VisitSummary>(query.getResultList(), pageable, total(visitFilter));
+	}
+	
+	@Override
+	public Page<VisitSummary> summariseOpen(VisitFilter visitFilter, Pageable pageable) {
+		CriteriaBuilder builder = manager.getCriteriaBuilder();
+		CriteriaQuery<VisitSummary> criteria = builder.createQuery(VisitSummary.class);
+		
+		Root<Visit> root = criteria.from(Visit.class);
+		
+		criteria.select(builder.construct(VisitSummary.class
+				, root.get(Visit_.id), root.get(Visit_.startDate)
+				, root.get(Visit_.finalDate), root.get(Visit_.open)
+				, root.get(Visit_.resident).get(Resident_.name)
+				, root.get(Visit_.visitant).get(Visitant_.name)
+				, root.get(Visit_.visitant).get(Visitant_.cpf)));
+		
+		List<Predicate> predicates = new ArrayList<>();
+		predicates.add(builder.equal(root.get(Visit_.open), true));
+		criteria.where(predicates.toArray(new Predicate[predicates.size()]));
 		
 		TypedQuery<VisitSummary> query = manager.createQuery(criteria);
 		addPagingRestrictions(query, pageable);

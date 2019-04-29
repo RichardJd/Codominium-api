@@ -7,15 +7,17 @@ public class VisitSummary {
 	private Long id;
 	private LocalDateTime startDate;
 	private LocalDateTime finalDate;
+	private Boolean open;
 	private String residentName;
 	private String visitantName;
 	private String cpfVisitant;
 
-	public VisitSummary(Long id, LocalDateTime startDate, LocalDateTime finalDate, String residentName,
+	public VisitSummary(Long id, LocalDateTime startDate, LocalDateTime finalDate, Boolean open, String residentName,
 			String visitantName, String cpfVisitant) {
 		this.id = id;
 		this.startDate = startDate;
 		this.finalDate = finalDate;
+		this.open = open;
 		this.residentName = residentName;
 		this.visitantName = visitantName;
 		this.cpfVisitant = cpfVisitant;
@@ -43,6 +45,14 @@ public class VisitSummary {
 
 	public void setFinalDate(LocalDateTime finalDate) {
 		this.finalDate = finalDate;
+	}
+
+	public Boolean getOpen() {
+		return open;
+	}
+
+	public void setOpen(Boolean open) {
+		this.open = open;
 	}
 
 	public String getResidentName() {

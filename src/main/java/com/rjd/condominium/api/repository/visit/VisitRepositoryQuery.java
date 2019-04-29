@@ -10,5 +10,6 @@ import com.rjd.condominium.api.repository.projection.VisitSummary;
 public interface VisitRepositoryQuery {
 
 	public Page<Visit> filtrate(VisitFilter visitFilter, Pageable pageable);
-	public Page<VisitSummary> summarise(VisitFilter visitFilter, Pageable pageable);
+	public Page<VisitSummary> summariseAll(VisitFilter visitFilter, Pageable pageable);
+	public Page<VisitSummary> summariseOpen(VisitFilter visitFilter, Pageable pageable);
 }
